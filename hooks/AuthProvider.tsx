@@ -27,9 +27,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       hasToken: !!auth.token,
       tokenLength: auth.token?.length,
       hasUser: !!auth.user,
+      userName: auth.user?.username,
+      isLoading: auth.isLoading,
       tokenPreview: auth.token ? `${auth.token.substring(0, 20)}...` : null
     });
-  }, [auth.isAuthenticated, auth.token, auth.user]);
+  }, [auth.isAuthenticated, auth.token, auth.user, auth.isLoading]);
 
   return (
     <AuthContext.Provider value={auth}>

@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useLogin, useAuthContext } from '../../hooks'
 
 export default function LoginPage() {
@@ -12,9 +11,39 @@ export default function LoginPage() {
     password: ''
   })
   const [showPassword, setShowPassword] = useState(false)
-  const { login, isLoading } = useLogin()
-  const { error } = useAuthContext()
-  const router = useRouter()
+  const [loginSuccess, setLoginSuccess] = useState(false)
+  const { login, isLoading: loginLoading } = useLogin()
+  const { error, isAuthenticated, isLoading } = useAuthContext()
+
+  // Redirect when authentication status changes
+  useEffect(() => {
+    console.log('Login page - Auth state changed:', { 
+      isAuthenticated, 
+      isLoading,
+      loginSuccess
+    })
+    
+    if (isAuthenticated && !isLoading) {
+      console.log('User authenticated after login, redirecting to /initial-state from useEffect')
+      window.location.replace('/initial-state')
+    }
+  }, [isAuthenticated, isLoading, loginSuccess])
+
+  // Additional redirect on login success
+  useEffect(() => {
+    if (loginSuccess && isAuthenticated) {
+      console.log('Login success detected with auth state, redirecting')
+      window.location.replace('/initial-state')
+    }
+  }, [loginSuccess, isAuthenticated])
+
+  // Redirect if already authenticated (e.g., page refresh while logged in)
+  useEffect(() => {
+    if (isAuthenticated && !isLoading && !loginLoading) {
+      console.log('User already authenticated on login page, redirecting')
+      window.location.replace('/initial-state')
+    }
+  }, [isAuthenticated, isLoading, loginLoading])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -36,15 +65,29 @@ export default function LoginPage() {
       return
     }
 
+    console.log('Attempting login with:', {
+      email: formData.email,
+      username: formData.username,
+      hasPassword: !!formData.password
+    })
+
     const result = await login({
       email: formData.email,
       username: formData.username,
       password: formData.password
     })
 
+    console.log('Login result:', result)
+
     if (result.success) {
-      // Redirect to initial state page after successful login
-      router.push('/initial-state')
+      console.log('Login successful, redirecting with window.location.replace()')
+      setLoginSuccess(true)
+      
+      // Use window.location.replace for immediate and reliable redirect
+      setTimeout(() => {
+        console.log('Redirecting to /initial-state')
+        window.location.replace('/initial-state')
+      }, 100)
     }
     // Error is handled by the useAuth hook
   }
@@ -132,10 +175,10 @@ export default function LoginPage() {
           {/* Login Button */}
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-2xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-12 shadow-lg"
+            disabled={loginLoading}
+            className="w-full bg-gradient-to-r from-[#62CDCB] to-[#4599DB] text-white py-4 px-6 rounded-2xl font-medium hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-12 shadow-lg"
           >
-            {isLoading ? (
+            {loginLoading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                 Logging in...
@@ -150,7 +193,7 @@ export default function LoginPage() {
         <div className="text-center mt-8">
           <p className="text-slate-300">
             No account?{' '}
-            <Link href="/register" className="text-blue-400 underline font-medium hover:text-blue-300 transition-colors">
+            <Link href="/register" className="text-[#62CDCB] underline font-medium hover:text-[#4599DB] transition-colors">
               Register here
             </Link>
           </p>

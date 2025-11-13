@@ -1,3 +1,5 @@
+import { calculateAge } from '../utils'
+
 interface AboutDisplayProps {
   userData: {
     displayName: string
@@ -10,18 +12,6 @@ interface AboutDisplayProps {
 }
 
 export default function AboutDisplay({ userData }: AboutDisplayProps) {
-  // Calculate age from birthday
-  const calculateAge = (birthday: string) => {
-    if (!birthday) return 0
-    const birthDate = new Date(birthday)
-    const today = new Date()
-    let age = today.getFullYear() - birthDate.getFullYear()
-    const monthDiff = today.getMonth() - birthDate.getMonth()
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--
-    }
-    return age
-  }
 
   // Check if we have any meaningful data to display
   const hasAnyData = userData.birthday || userData.height || userData.weight || userData.horoscope || userData.zodiac

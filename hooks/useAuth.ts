@@ -144,7 +144,17 @@ export const useAuth = () => {
       tokenPreview: token ? `${token.substring(0, 20)}...` : null
     });
     
-    // Ensure we're on client-side before using localStorage
+    // Update state immediately first
+    setAuthState(prev => ({
+      ...prev,
+      user,
+      token,
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    }));
+    
+    // Then save to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('access_token', token);
       localStorage.setItem('user', JSON.stringify(user));
@@ -155,13 +165,7 @@ export const useAuth = () => {
       });
     }
     
-    setAuthState(prev => ({
-      ...prev,
-      user,
-      token,
-      isAuthenticated: true,
-      error: null,
-    }));
+    console.log('setAuth - State updated, isAuthenticated should now be true');
   }, []);
 
   const clearAuth = useCallback(() => {
@@ -199,7 +203,7 @@ export const useAuth = () => {
 
 // Custom hook for login functionality
 export const useLogin = () => {
-  const { setAuth, setLoading, setError, isLoading } = useAuth();
+  const { setAuth, setLoading, setError, isLoading, isAuthenticated } = useAuth();
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     setLoading(true);
@@ -237,8 +241,18 @@ export const useLogin = () => {
       if (response.access_token) {
         // Extract user info from JWT token
         const user = extractUserFromToken(response.access_token);
+        console.log('Login: Setting auth with user:', user);
+        console.log('Login: Setting auth with token preview:', response.access_token.substring(0, 20) + '...');
+        
+        // Set auth state first
         setAuth(user, response.access_token);
-        return { success: true, user, token: response.access_token };
+        
+        // Add longer delay to ensure state propagates properly
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        console.log('Login: Auth state should now be updated');
+        
+        return { success: true, user, token: response.access_token, shouldRedirect: true };
       } else {
         const errorMessage = response.message || 'Login failed';
         setError(errorMessage);

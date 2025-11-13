@@ -48,6 +48,44 @@ export const calculateZodiac = (dateString: string) => {
   return animals[index];
 };
 
+// Function to calculate age from birthday string
+export const calculateAge = (birthday: string) => {
+  if (!birthday) return 0;
+  
+  let birthDate: Date;
+  
+  // Handle different date formats
+  if (birthday.includes('/')) {
+    // Format: DD / MM / YYYY or DD/MM/YYYY
+    const cleanBirthday = birthday.replace(/\s/g, ''); // Remove spaces
+    const parts = cleanBirthday.split('/');
+    if (parts.length === 3) {
+      // Convert DD/MM/YYYY to YYYY-MM-DD for proper Date parsing
+      birthDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    } else {
+      return 0;
+    }
+  } else {
+    // Assume ISO format YYYY-MM-DD
+    birthDate = new Date(birthday);
+  }
+  
+  if (isNaN(birthDate.getTime())) {
+    return 0;
+  }
+  
+  const today = new Date();
+  const age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  // Adjust age if birthday hasn't occurred this year yet
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    return age - 1;
+  }
+  
+  return age;
+};
+
 // Date formatting utilities
 export const formatDate = {
   toInput: (dateString: string) => {

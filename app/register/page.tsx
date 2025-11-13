@@ -80,8 +80,9 @@ export default function RegisterPage() {
     })
 
     if (result.success) {
-      // Redirect to initial state page after successful registration
-      router.push('/initial-state')
+      // Force redirect to initial state page after successful registration
+      console.log('Registration successful, redirecting to /initial-state')
+      router.replace('/initial-state')
     }
     // Error is handled by the useAuth hook
   }
@@ -204,7 +205,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-2xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-8 shadow-lg"
+            className="w-full bg-gradient-to-r from-[#62CDCB] to-[#4599DB] text-white py-4 px-6 rounded-2xl font-medium hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-8 shadow-lg"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
@@ -221,7 +222,7 @@ export default function RegisterPage() {
         <div className="text-center mt-8">
           <p className="text-slate-300">
             Already have an account?{' '}
-            <Link href="/login" className="text-blue-400 underline font-medium hover:text-blue-300 transition-colors">
+            <Link href="/login" className="text-[#62CDCB] underline font-medium hover:text-[#4599DB] transition-colors">
               Login here
             </Link>
           </p>

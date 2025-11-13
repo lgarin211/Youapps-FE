@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Header from './components/Header'
 import ProfileImage from './components/ProfileImage'
 import SimpleProfile from './components/SimpleProfile'
@@ -16,7 +15,6 @@ import { useAuthContext, useProfile } from '../../hooks'
 import type { UserData, TempAboutData } from './types'
 
 export default function InitialStatePage() {
-  const router = useRouter()
   const { isAuthenticated, user, isLoading: authLoading } = useAuthContext()
   const { 
     profile, 
@@ -64,9 +62,10 @@ export default function InitialStatePage() {
   // Check authentication
   useEffect(() => {
     if (!isAuthenticated && !authLoading) {
-      router.push('/login')
+      console.log('User not authenticated, redirecting to login')
+      window.location.replace('/login')
     }
-  }, [isAuthenticated, authLoading, router])
+  }, [isAuthenticated, authLoading])
 
   // Update local state when profile data changes
   useEffect(() => {
