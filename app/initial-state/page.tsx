@@ -231,7 +231,7 @@ export default function InitialStatePage() {
   // Loading state - show loading if auth is loading or profile is loading
   if (authLoading || profileLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-800 to-blue-900 text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center" style={{backgroundImage: 'url(/BGp.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p>{authLoading ? 'Checking authentication...' : 'Loading profile...'}</p>
@@ -243,7 +243,7 @@ export default function InitialStatePage() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-800 to-blue-900 text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center" style={{backgroundImage: 'url(/BGp.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
         <div className="text-center">
           <p className="text-red-400 mb-4">{error}</p>
           <button 
@@ -259,7 +259,7 @@ export default function InitialStatePage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-800 to-blue-900 text-white">
+      <div className="min-h-screen text-white" style={{backgroundImage: 'url(/BGp.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
         <Header />
 
         <div className="px-6 mt-8">

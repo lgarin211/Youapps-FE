@@ -87,7 +87,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white flex flex-col">
+    <div className="min-h-screen text-white flex flex-col" style={{backgroundImage: 'url(/BGp.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
       <div className="flex-1 px-6 flex flex-col justify-center">
         {/* Back Button */}
         <Link href="/" className="flex items-center space-x-2 mb-8 self-start">

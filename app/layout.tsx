@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white min-h-screen">
+      <body className="text-white min-h-screen" style={{backgroundImage: 'url(/BGp.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed'}}>
         <AuthProvider>
           <div className="max-w-md mx-auto min-h-screen">
             {children}
